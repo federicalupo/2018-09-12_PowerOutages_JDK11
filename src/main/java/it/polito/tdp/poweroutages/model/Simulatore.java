@@ -9,6 +9,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+import it.polito.tdp.poweroutages.model.Evento.TipoEvento;
+
 public class Simulatore {
 	
 	//mondo
@@ -45,6 +47,7 @@ public class Simulatore {
 	
 	private void processEvent(Evento e) {
 		switch(e.getTipo()){
+			
 			case INIZIO_INTERRUZIONE:
 				
 				List<Nerc> aiutanti = new ArrayList<>();
@@ -72,17 +75,23 @@ public class Simulatore {
 			
 				if(aiutante == null) {
 					this.nCatastrofi++;
-					e.setDonatore(aiutante);
 				}else {
 					e.getNerc().aggiungiDonatore(aiutante, e.getData());
 					aiutante.setImpegnato(true); //settare a impegnato
-					e.setDonatore(aiutante);
+					
+					//e.setDonatore => STO IMPOSTANDO DONATORE NELL'EVENTO INIZIO INTERRUZIONE
+					//MA L'EVENTO FINE INTERRUZIONE AVRà SEMPRE DONATORE NULL
+					//devo creare l'evento fine qui dentro!
+					
+					Evento fine = new Evento(TipoEvento.FINE_INTERRUZIONE, e.getNerc(), e.getInizio(), e.getFine(), e.getFine(), e.getDurata(), aiutante);
+					coda.add(fine);
 				}
 			
 				break;
 				
 			case FINE_INTERRUZIONE:
 				
+	
 				if(e.getDonatore()!=null) {
 					e.getDonatore().aggiungiBonus(e.getDurata());
 					e.getDonatore().setImpegnato(false); //liberato

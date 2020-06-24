@@ -11,18 +11,48 @@ public class Evento implements Comparable<Evento>{
 	
 	private TipoEvento tipo;
 	private Nerc nerc;
+	private LocalDateTime inizio;
+	private LocalDateTime fine;
 	private LocalDateTime data;
 	private Long durata;
 	private Nerc donatore;
 	
-	public Evento(TipoEvento tipo, Nerc nerc, LocalDateTime data, Long durata) {
+	/**
+	 * inizio
+	 * @param tipo
+	 * @param nerc
+	 * @param data
+	 * @param durata
+	 */
+	public Evento(TipoEvento tipo, Nerc nerc, LocalDateTime inizio, LocalDateTime fine, LocalDateTime data, Long durata) {
 		super();
 		this.tipo = tipo;
 		this.nerc = nerc;
+		this.inizio = inizio;
+		this.fine= fine;
 		this.data = data;
 		this.durata = durata;
-		
+		this.donatore = null;
 	}
+	
+	/**
+	 * fine
+	 * @param tipo
+	 * @param nerc
+	 * @param data
+	 * @param durata
+	 */
+	public Evento(TipoEvento tipo, Nerc nerc, LocalDateTime inizio, LocalDateTime fine,LocalDateTime data, Long durata, Nerc donatore) {
+		super();
+		this.tipo = tipo;
+		this.nerc = nerc;
+		this.inizio = inizio;
+		this.fine= fine;
+		this.data = data;
+		this.durata = durata;
+		this.donatore = donatore;
+	}
+
 
 	public TipoEvento getTipo() {
 		return tipo;
@@ -31,6 +61,15 @@ public class Evento implements Comparable<Evento>{
 	
 	public Nerc getNerc() {
 		return nerc;
+	}
+
+	
+	public LocalDateTime getInizio() {
+		return inizio;
+	}
+
+	public LocalDateTime getFine() {
+		return fine;
 	}
 
 	public LocalDateTime getData() {
@@ -46,8 +85,11 @@ public class Evento implements Comparable<Evento>{
 		return donatore;
 	}
 
-	public void setDonatore(Nerc donatore) {
-		this.donatore = donatore;
+
+	
+	@Override
+	public String toString() {
+		return tipo +" ";
 	}
 
 	@Override

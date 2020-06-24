@@ -127,14 +127,15 @@ public class PowerOutagesDAO {
 				Long giorni = Duration.between(inizio, fine).toDays(); 
 				
 				if(n!=null) {
-					Evento e = new Evento(TipoEvento.INIZIO_INTERRUZIONE, n, inizio, giorni);
-					Evento e2 = new Evento(TipoEvento.FINE_INTERRUZIONE, n, fine, giorni);
+					Evento e = new Evento(TipoEvento.INIZIO_INTERRUZIONE, n, inizio, fine, inizio, giorni);
+					
 					eventi.add(e);
-					eventi.add(e2);
+					
 				}
 			}
 
 			conn.close();
+			
 			return eventi;
 
 		} catch (SQLException e) {
