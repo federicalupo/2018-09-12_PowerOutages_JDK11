@@ -1,9 +1,12 @@
 package it.polito.tdp.poweroutages;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.poweroutages.model.Arco;
 import it.polito.tdp.poweroutages.model.Model;
+import it.polito.tdp.poweroutages.model.Nerc;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,7 +31,7 @@ public class FXMLController {
     private Button btnCreaGrafo;
 
     @FXML
-    private ComboBox<?> cmbBoxNerc;
+    private ComboBox<Nerc> cmbBoxNerc;
 
     @FXML
     private Button btnVisualizzaVicini;
@@ -42,16 +45,52 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
 
+    	this.txtResult.clear();
+    	this.model.creaGrafo();
+    	this.txtResult.appendText(String.format("Grafo creato!\n#vertici: %d\n#archi: %d\n",model.nVertici(), model.nArchi()));
+    	
+    	this.cmbBoxNerc.getItems().clear(); 
+    	this.cmbBoxNerc.getItems().addAll(model.tendina());
+    	this.cmbBoxNerc.setValue(model.tendina().get(0));
+    
     }
 
     @FXML
     void doSimula(ActionEvent event) {
 
+    	this.txtResult.clear();
+    	
+    	try {
+    		Integer k = Integer.valueOf(this.txtK.getText());
+    		Integer nCatastrofi = model.simula(k);
+    		this.txtResult.appendText("Totale bonus per NERC:\n");
+    		
+    		for(Nerc n : model.tendina()) {
+    			this.txtResult.appendText(n.getValue()+" "+n.getBonus()+"\n");
+    		}
+    		
+    		this.txtResult.appendText("\nNumero catastrofi: "+nCatastrofi);
+    	
+    	}catch(NumberFormatException nfe) {
+    		this.txtResult.appendText("Inserisci valore corretto");
+    	}
     }
 
     @FXML
     void doVisualizzaVicini(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	
+    	Nerc n = this.cmbBoxNerc.getValue();
+    	
+    	List<Arco> vicini = model.vicini(n);  
+    	if(vicini.size()>0) {
+	    	this.txtResult.appendText("Vicini di: "+n+"\n");
+	    	for(Arco a : vicini) {
+	    		this.txtResult.appendText(a.toString()+"\n");
+	    	}
+    	}else {
+    		this.txtResult.appendText("Nessun vicino");
+    	}
     }
 
     @FXML

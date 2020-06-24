@@ -17,7 +17,7 @@ public class TestDAO {
 
 		PowerOutagesDAO dao = new PowerOutagesDAO();
 
-		System.out.println(dao.loadAllNercs());
+		//System.out.println(dao.loadAllNercs());
 	}
 
 }
